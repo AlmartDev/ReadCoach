@@ -1,0 +1,73 @@
+import { Settings, User, Play, Square, SkipForward, ChevronLeft } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from 'react';
+import { ProfilePopup } from './ProfilePopup'; 
+
+export const Header = ({ selectedMode, isPlaying, setIsPlaying, onBack, onOpenSettings }) => {
+  const [isProfileOpen, setIsProfileOpen] = useState(false); 
+
+  return (
+    <header className="h-24 w-full flex justify-center bg-c-primary z-20 relative transition-colors duration-500">
+      <div className="w-[60%] min-w-[400px] grid grid-cols-3 items-center h-full">
+        
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-c-distinct rounded-lg flex items-center justify-center font-black text-white">R</div>
+              <h1 className="text-xl font-bold tracking-tighter text-c-light">READCOACH</h1>
+          </div>
+          {selectedMode && (
+            <button onClick={onBack} className="flex items-center gap-2 text-c-light hover:text-white transition-colors">
+              <ChevronLeft size={20} /> <span className="text-xs font-bold uppercase tracking-widest">Back</span>
+            </button>
+          )}
+        </div>
+
+        <div className="flex justify-center">
+          <AnimatePresence>
+            {selectedMode === 'reader' && (
+              <motion.div 
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.8, opacity: 0 }}
+                className="flex items-center gap-6"
+              >
+                <button className="text-slate-500 hover:text-white"><SkipForward size={18} className="rotate-180"/></button>
+                <button 
+                  onClick={() => setIsPlaying(!isPlaying)}
+                  className="w-12 h-12 bg-c-distinct rounded-full flex items-center justify-center text-white hover:shadow-[0_0_20px_rgba(var(--c-distinct),0.4)] transition-all"
+                >
+                  {isPlaying ? <Square size={20} fill="white"/> : <Play size={20} fill="white" className="ml-1"/>}
+                </button>
+                <button className="text-slate-500 hover:text-white"><SkipForward size={18}/></button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        <div className="flex justify-end items-center gap-3">
+          <button className="p-2 text-c-light hover:text-white">EN</button>
+          
+          <button className="p-2 text-c-light hover:text-white" onClick={onOpenSettings}>
+            <Settings size={20} />
+          </button>
+          
+          <div className="relative">
+            <button 
+                onClick={() => setIsProfileOpen(!isProfileOpen)}
+                className={`p-2 transition-colors ${isProfileOpen ? 'text-white bg-white/10 rounded-lg' : 'text-c-light hover:text-white'}`}
+            >
+                <User size={20} />
+            </button>
+
+            <AnimatePresence>
+                {isProfileOpen && (
+                    <ProfilePopup onClose={() => setIsProfileOpen(false)} />
+                )}
+            </AnimatePresence>
+          </div>
+
+        </div>
+      </div>  
+    </header>
+  );
+};

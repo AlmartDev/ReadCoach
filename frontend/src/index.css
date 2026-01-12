@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --c-primary: 4 13 18;
+  --c-secondary: 24 61 61;
+  --c-light: 147 177 166;
+  --c-distinct: 79 178 134;
+  --c-text-main: 255 255 255;
+}
+
+body {
+  background-color: rgb(var(--c-primary));
+  color: rgb(var(--c-text-main));
+  margin: 0;
+  transition: background-color 0.5s ease-in-out;
+}
