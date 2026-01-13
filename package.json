@@ -2,5 +2,8 @@
   "name": "read-coach-root",
   "scripts": {
     "build": "cd frontend && npm install && npm run build"
+  },
+  "dependencies": {
+    "@vercel/analytics": "^1.6.1"
   }
 }
