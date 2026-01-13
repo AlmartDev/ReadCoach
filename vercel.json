@@ -1,14 +1,13 @@
 {
   "version": 2,
-  "public": true,
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "/api/index.py"
+      "destination": "api/index.py"
     },
     {
       "source": "/((?!api/).*)",
-      "destination": "/frontend/dist/$1"
+      "destination": "/frontend/dist/index.html"
     }
   ]
 }
