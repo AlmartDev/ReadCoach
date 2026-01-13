@@ -17,7 +17,7 @@ export const Footer = ({
       <div className="w-[60%] min-w-[400px] flex items-center justify-between">
         
         <div className="flex flex-col items-start transition-opacity duration-500" style={{ opacity: showControls ? 1 : 0 }}>
-          <div className="text-[0.7rem] font-bold text-c-light uppercase tracking-[2px]">
+          <div className="text-[0.7rem] font-bold text-c-light uppercase tracking-[2px] m-3">
               WPM | {wpms.map(v => (
                 <button 
                   key={v}
@@ -35,7 +35,7 @@ export const Footer = ({
                 </button>
           </div>
           
-          <div className="text-[0.7rem] font-bold text-c-light tracking-[2px] mt-1 uppercase">
+          <div className="text-[0.7rem] font-bold text-c-light tracking-[2px] mt-1 uppercase m-3">
               FONT | {fonts.map(f => (
                 <button 
                   key={f}
