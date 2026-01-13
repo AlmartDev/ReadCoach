@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import { Header } from './components/Header';
 import { ReaderDisplay } from './components/ReaderDisplay';
 import { Footer } from './components/Footer';
@@ -156,6 +157,7 @@ function AppContent() {
       <AnimatePresence>
         {isSettingsOpen && <SettingsPopup isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} fontSize={fontSize} setFontSize={setFontSize} />}
       </AnimatePresence>
+      <Analytics />
     </div>
   );
 }
