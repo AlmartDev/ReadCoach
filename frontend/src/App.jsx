@@ -43,17 +43,24 @@ function AppContent() {
   }, [history]);
 
   useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (selectedMode !== 'reader') return;
+  const handleKeyDown = (e) => {
+    const isTyping = e.target.tagName === 'INPUT' || 
+                     e.target.tagName === 'TEXTAREA' || 
+                     e.target.isContentEditable;
+
+      if (selectedMode !== 'reader' || isTyping) return;
+
       if (e.code === 'Space') {
         e.preventDefault();
         setIsPlaying(prev => !prev);
       }
+      
       if (e.code === 'Tab') {
         e.preventDefault();
         handleNextText();
       }
     };
+
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [selectedMode, handleNextText]);
@@ -153,7 +160,7 @@ function AppContent() {
       />
 
       <InputModal isOpen={isWpmModalOpen} onClose={() => setIsWpmModalOpen(false)} title="Custom WPM" onSubmit={(v) => setWpm(parseInt(v))} />
-      <InputModal isOpen={isFontModalOpen} onClose={() => setIsFontModalOpen(false)} title="Google Font Name" onSubmit={handleCustomFontSubmit} />
+      <InputModal isOpen={isFontModalOpen} onClose={() => setIsFontModalOpen(false)} title="Google Font Name" type="text" onSubmit={handleCustomFontSubmit} />
       <AnimatePresence>
         {isSettingsOpen && <SettingsPopup isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} fontSize={fontSize} setFontSize={setFontSize} />}
       </AnimatePresence>

@@ -45,7 +45,8 @@ export const ReaderDisplay = ({ layoutId, currentWord, wpm, fontFamily, fontSize
         {/*<div className="w-[2px] h-6 bg-c-distinct/40 mt-6 rounded-full" />*/}
       </div>
 
-      <div className="absolute inset-0 border-[1px] border-c-distinct/5 rounded-[2.5rem] pointer-events-none" />
+      <div className="absolute inset-0 rounded-[2.5rem] pointer-events-none" />
+      {/*border-[1px] border-c-distinct/5*/}
     </motion.section>
   );
 };

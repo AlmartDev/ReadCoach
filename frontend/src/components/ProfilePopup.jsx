@@ -23,7 +23,7 @@ export const ProfilePopup = ({ onClose }) => {
               :)
             </div>
             <div>
-              <h3 className="text-sm font-bold text-white tracking-wide">Offline User</h3>
+              <h3 className="text-sm font-bold text-c-light tracking-wide">Offline User</h3>
               <p className="text-[10px] font-bold text-c-light uppercase tracking-wider">Level 1</p>
             </div>
           </div>
