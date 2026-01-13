@@ -23,24 +23,6 @@ function AppContent() {
 
   const words = currentText.content.split(/\s+/);
 
-  useEffect(() => {
-    let interval = null;
-    if (isPlaying && wordIndex < words.length) {
-      interval = setInterval(() => {
-        setWordIndex((prev) => {
-          if (prev >= words.length - 1) {
-            setIsPlaying(false);
-            return prev;
-          }
-          return prev + 1;
-        });
-      }, 60000 / wpm);
-    } else {
-      clearInterval(interval);
-    }
-    return () => clearInterval(interval);
-  }, [isPlaying, wpm, wordIndex, words.length]);
-
   const handleNextText = useCallback(() => {
     setHistory(prev => [...prev, currentText]);
     const remaining = TEXT_LIBRARY.filter(t => t.id !== currentText.id);
@@ -58,6 +40,40 @@ function AppContent() {
     setWordIndex(0);
     setIsPlaying(false);
   }, [history]);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (selectedMode !== 'reader') return;
+      if (e.code === 'Space') {
+        e.preventDefault();
+        setIsPlaying(prev => !prev);
+      }
+      if (e.code === 'Tab') {
+        e.preventDefault();
+        handleNextText();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedMode, handleNextText]);
+
+  useEffect(() => {
+    let interval = null;
+    if (isPlaying && wordIndex < words.length) {
+      interval = setInterval(() => {
+        setWordIndex((prev) => {
+          if (prev >= words.length - 1) {
+            setIsPlaying(false);
+            return prev;
+          }
+          return prev + 1;
+        });
+      }, 60000 / wpm);
+    } else {
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval);
+  }, [isPlaying, wpm, wordIndex, words.length]);
 
   const handleCustomFontSubmit = (input) => {
     let fontName = '';
@@ -91,16 +107,6 @@ function AppContent() {
         onNext={handleNextText}
         onPrev={handlePrevText}
       />
-      <AnimatePresence>
-        {isSettingsOpen && (
-          <SettingsPopup 
-            isOpen={isSettingsOpen} 
-            onClose={() => setIsSettingsOpen(false)}
-            fontSize={fontSize}
-            setFontSize={setFontSize}
-          />
-        )}
-      </AnimatePresence>
       <main className="flex-grow flex items-center justify-center relative px-4">
         <AnimatePresence mode="popLayout">
           {!selectedMode ? (
@@ -131,34 +137,10 @@ function AppContent() {
               }}
             />
           ) : (
-            <motion.div 
-                key="tutorial-view"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 20 }}
-                className="w-[60%] h-[80%] bg-c-secondary rounded-[2.5rem] flex items-center justify-center absolute"
-              >
-                <h2 className="text-xl font-bold text-c-text-main uppercase tracking-widest">Tutorial</h2>
-              </motion.div>
+            <motion.div key="tutorial" className="text-c-light">Tutorial Mode Active</motion.div>
           )}
         </AnimatePresence>
       </main>
-      <InputModal 
-        isOpen={isWpmModalOpen}
-        onClose={() => setIsWpmModalOpen(false)}
-        title="Custom WPM"
-        defaultValue={wpm}
-        type="number"
-        onSubmit={(val) => setWpm(parseInt(val) || wpm)}
-      />
-      <InputModal 
-        isOpen={isFontModalOpen}
-        onClose={() => setIsFontModalOpen(false)}
-        title="Enter Font Name or Link"
-        defaultValue=""
-        type="text"
-        onSubmit={handleCustomFontSubmit}
-      />
       <Footer 
         showControls={selectedMode === 'reader'} 
         wpm={wpm}
@@ -168,6 +150,12 @@ function AppContent() {
         onOpenCustomWpm={() => setIsWpmModalOpen(true)}
         onOpenCustomFont={() => setIsFontModalOpen(true)}
       />
+
+      <InputModal isOpen={isWpmModalOpen} onClose={() => setIsWpmModalOpen(false)} title="Custom WPM" onSubmit={(v) => setWpm(parseInt(v))} />
+      <InputModal isOpen={isFontModalOpen} onClose={() => setIsFontModalOpen(false)} title="Google Font Name" onSubmit={handleCustomFontSubmit} />
+      <AnimatePresence>
+        {isSettingsOpen && <SettingsPopup isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} fontSize={fontSize} setFontSize={setFontSize} />}
+      </AnimatePresence>
     </div>
   );
 }
@@ -178,19 +166,10 @@ const ModeCard = ({ layoutId, title, onClick }) => (
     onClick={onClick}
     className="flex-1 h-[50%] bg-c-secondary rounded-[2.5rem] flex items-center justify-center cursor-pointer hover:bg-c-secondary/80 transition-colors duration-500"
   >
-    <motion.h3 
-      layoutId={layoutId === "shared-reader-frame" ? "shared-reader-text" : undefined}
-      className="text-2xl font-black tracking-[4px] text-c-distinct"
-    >
+    <motion.h3 layoutId={layoutId === "shared-reader-frame" ? "shared-reader-text" : undefined} className="text-2xl font-black tracking-[4px] text-c-distinct">
       {title}
     </motion.h3>
   </motion.div>
 );
 
-export default function App() {
-  return (
-    <ThemeProvider>
-      <AppContent />
-    </ThemeProvider>
-  );
-}
+export default function App() { return (<ThemeProvider><AppContent /></ThemeProvider>); }

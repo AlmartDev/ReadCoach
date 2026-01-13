@@ -1,10 +1,29 @@
-import { Settings, User, Play, Square, SkipForward, ChevronLeft, ArrowLeftRight, ArrowDownCircle, LucideArrowDownCircle, CircleSlash, PauseCircle, Shuffle } from 'lucide-react';
+import { Settings, User, Play, Square, SkipForward, ChevronLeft, Maximize, Minimize, Shrink, Expand, Shuffle } from 'lucide-react'; // Added Maximize/Minimize
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ProfilePopup } from './ProfilePopup'; 
 
 export const Header = ({ selectedMode, isPlaying, setIsPlaying, onBack, onOpenSettings, onNext, onPrev }) => {
   const [isProfileOpen, setIsProfileOpen] = useState(false); 
+  
+  const [isFullscreen, setIsFullscreen] = useState(false); 
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, []);
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch((err) => {
+        console.error(`Error attempting to enable fullscreen: ${err.message}`);
+      });
+    } else {
+      document.exitFullscreen();
+    }
+  };
 
   return (
     <header className="h-24 w-full flex justify-center bg-c-primary z-20 relative transition-colors duration-500">
@@ -52,7 +71,14 @@ export const Header = ({ selectedMode, isPlaying, setIsPlaying, onBack, onOpenSe
 
         <div className="flex justify-end items-center gap-3">
           <button className="p-2 text-c-light hover:text-white">EN</button>
-          
+          <button 
+            onClick={toggleFullscreen}
+            className="p-2 text-c-light hover:text-white transition-colors"
+            title="Toggle Fullscreen"
+          >
+            {isFullscreen ? <Shrink size={20} /> : <Expand size={20} />}
+          </button>
+
           <button className="p-2 text-c-light hover:text-white" onClick={onOpenSettings}>
             <Settings size={20} />
           </button>

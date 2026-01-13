@@ -20,24 +20,32 @@ export const ReaderDisplay = ({ layoutId, currentWord, wpm, fontFamily, fontSize
         <pre className="font-sans">ID: {textMetadata.id}</pre>
       </motion.div>
 
-      <div className="flex justify-center items-center w-full h-full pointer-events-none">
-        <motion.div 
-          layoutId={isPlaying ? undefined : "shared-reader-text"}
-          key={isPlaying ? currentWord : "static-entry"}
-          initial={isPlaying ? { opacity: 1 } : { opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.2 }}
-          className="tracking-[-0.1rem] select-none text-c-text-main text-center whitespace-nowrap"
-          style={{ 
-            fontFamily: centerFont,
-            fontSize: `${fontSize}rem`,
-            lineHeight: 1,
-            display: 'inline-block'
-          }}
-        >
-          {currentWord}
-        </motion.div>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center pointer-events-none w-full">
+        {/*<div className="w-[2px] h-6 bg-c-distinct/40 mb-6 rounded-full" />*/}
+        
+        <div className="flex justify-center items-center w-full min-h-[1.2em]">
+            <motion.div 
+                layoutId={isPlaying ? undefined : "shared-reader-text"}
+                key={isPlaying ? currentWord : "static-entry"}
+                initial={isPlaying ? { opacity: 1 } : { opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.2 }}
+                className="tracking-[-0.1rem] select-none text-c-text-main text-center whitespace-nowrap"
+                style={{ 
+                    fontFamily: centerFont,
+                    fontSize: `${fontSize}rem`,
+                    lineHeight: 1,
+                    display: 'inline-block'
+                }}
+            >
+                {currentWord}
+            </motion.div>
+        </div>
+
+        {/*<div className="w-[2px] h-6 bg-c-distinct/40 mt-6 rounded-full" />*/}
       </div>
+
+      <div className="absolute inset-0 border-[1px] border-c-distinct/5 rounded-[2.5rem] pointer-events-none" />
     </motion.section>
   );
 };

@@ -1,8 +1,20 @@
 export const TEXT_LIBRARY = [
   {
-    id: "001",
+    id: "W001",
     title: "Welcome to ReadCoach",
     content: "Hello! Welcome to your professional reading environment. This tool uses RSVP technology to help you process information faster. Click the forward arrow to explore more texts or adjust your words per minute in the footer to challenge yourself.",
+    isWelcome: true
+  },
+  {
+    id: "W002",
+    title: "Welcome to ReadCoach",
+    content: "Welcome to Read Coach! This application is designed to enhance your reading speed and comprehension using Rapid Serial Visual Presentation (RSVP) technology. Get started by selecting a text and adjusting your reading settings.",
+    isWelcome: true
+  },
+  {
+    id: "W003",
+    title: "Welcome to ReadCoach",
+    content: "Hey there! You've just opened Read Coach. This app is built to help you read faster and retain more information. Start by choosing a text and setting your preferred reading speed.",
     isWelcome: true
   },
   {
