@@ -1,4 +1,3 @@
-// frontend/src/components/Settings.jsx
 import React from 'react';
 import { motion } from 'framer-motion';
 import { X, Type, Zap, EyeOff, FocusIcon, Check } from 'lucide-react';

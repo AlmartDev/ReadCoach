@@ -2,10 +2,12 @@ FROM python:3.11-slim
 
 WORKDIR /code
 
-COPY ./requirements.txt /code/requirements.txt
+# Copy requirements from the context (the backend folder)
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+# Copy the app code
+COPY . .
 
-COPY ./app /code/app
-
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
+# Run uvicorn on port 8000
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

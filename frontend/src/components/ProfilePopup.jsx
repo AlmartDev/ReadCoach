@@ -1,4 +1,3 @@
-// frontend/src/components/ProfilePopup.jsx
 import React from 'react';
 import { motion } from 'framer-motion';
 import { LogOut, User, BarChart2 } from 'lucide-react';
@@ -6,13 +5,11 @@ import { LogOut, User, BarChart2 } from 'lucide-react';
 export const ProfilePopup = ({ onClose }) => {
   return (
     <>
-      {/* 1. Invisible Backdrop to handle "Click Outside" */}
       <div 
         className="fixed inset-0 z-40 cursor-default" 
         onClick={onClose} 
       />
 
-      {/* 2. The Popup Card */}
       <motion.div
         initial={{ opacity: 0, y: -10, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -20,7 +17,6 @@ export const ProfilePopup = ({ onClose }) => {
         transition={{ duration: 0.2, ease: "easeOut" }}
         className="absolute top-12 right-0 w-64 bg-c-secondary border border-white/10 rounded-2xl shadow-2xl z-50 overflow-hidden"
       >
-        {/* Header Section */}
         <div className="p-4 border-b border-white/5 bg-white/5">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-c-distinct flex items-center justify-center text-white font-black shadow-lg">
@@ -33,7 +29,6 @@ export const ProfilePopup = ({ onClose }) => {
           </div>
         </div>
 
-        {/* Stats Placeholder */}
         <div className="p-2">
             <div className="flex items-center justify-between p-2 hover:bg-white/5 rounded-lg transition-colors cursor-pointer group">
                 <div className="flex items-center gap-3 text-slate-300 group-hover:text-white">
@@ -46,7 +41,6 @@ export const ProfilePopup = ({ onClose }) => {
 
         <div className="h-px bg-white/5 mx-4" />
 
-        {/* Actions */}
         <div className="p-2">
            <button className="w-full flex items-center gap-3 p-2 text-red-400 hover:bg-red-500/10 hover:text-red-300 rounded-lg transition-colors">
               <LogOut size={16} />

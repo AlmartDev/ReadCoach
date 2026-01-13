@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Header } from './components/Header';
 import { ReaderDisplay } from './components/ReaderDisplay';
 import { Footer } from './components/Footer';
@@ -6,25 +6,65 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Settings as SettingsPopup } from './components/Settings'; 
 import { ThemeProvider } from './contexts/ThemeContext';
 import { InputModal } from './components/InputModal'; 
+import { TEXT_LIBRARY } from './data/texts';
 
 function AppContent() {
   const [selectedMode, setSelectedMode] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-
-  // Global Settings
+  
   const [wpm, setWpm] = useState(250);
   const [fontFamily, setFontFamily] = useState('serif');
-  const [fontSize, setFontSize] = useState(18); // Default size in rem
+  const [fontSize, setFontSize] = useState(18);
   
-  // Modal States
   const [isWpmModalOpen, setIsWpmModalOpen] = useState(false);
   const [isFontModalOpen, setIsFontModalOpen] = useState(false);
+
+  const [currentText, setCurrentText] = useState(TEXT_LIBRARY.find(t => t.isWelcome) || TEXT_LIBRARY[0]);
+  const [wordIndex, setWordIndex] = useState(0);
+  const [history, setHistory] = useState([]);
+
+  const words = currentText.content.split(/\s+/);
+
+  useEffect(() => {
+    let interval = null;
+    if (isPlaying && wordIndex < words.length) {
+      interval = setInterval(() => {
+        setWordIndex((prev) => {
+          if (prev >= words.length - 1) {
+            setIsPlaying(false);
+            return prev;
+          }
+          return prev + 1;
+        });
+      }, 60000 / wpm);
+    } else {
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval);
+  }, [isPlaying, wpm, wordIndex, words.length]);
+
+  const handleNextText = useCallback(() => {
+    setHistory(prev => [...prev, currentText]);
+    const remaining = TEXT_LIBRARY.filter(t => t.id !== currentText.id);
+    const randomText = remaining[Math.floor(Math.random() * remaining.length)];
+    setCurrentText(randomText);
+    setWordIndex(0);
+    setIsPlaying(false);
+  }, [currentText]);
+
+  const handlePrevText = useCallback(() => {
+    if (history.length === 0) return;
+    const lastText = history[history.length - 1];
+    setHistory(prev => prev.slice(0, -1));
+    setCurrentText(lastText);
+    setWordIndex(0);
+    setIsPlaying(false);
+  }, [history]);
 
   const handleCustomFontSubmit = (input) => {
     let fontName = '';
     let fontUrl = '';
-
     if (input.includes('fonts.googleapis.com')) {
       fontUrl = input;
       const urlParams = new URLSearchParams(input.split('?')[1]);
@@ -34,7 +74,6 @@ function AppContent() {
       const formattedName = fontName.replace(/\s+/g, '+');
       fontUrl = `https://fonts.googleapis.com/css2?family=${formattedName}&display=swap`;
     }
-
     if (fontName) {
       const link = document.createElement('link');
       link.rel = 'stylesheet';
@@ -50,8 +89,10 @@ function AppContent() {
         selectedMode={selectedMode} 
         isPlaying={isPlaying} 
         setIsPlaying={setIsPlaying} 
-        onBack={() => setSelectedMode(null)} 
+        onBack={() => { setSelectedMode(null); setIsPlaying(false); }} 
         onOpenSettings={() => setIsSettingsOpen(true)}
+        onNext={handleNextText}
+        onPrev={handlePrevText}
       />
 
       <AnimatePresence>
@@ -90,11 +131,15 @@ function AppContent() {
             <ReaderDisplay 
               key="reader-view"
               layoutId="shared-reader-frame"
-              isPlaying={isPlaying} 
-              text="Hello!"
+              currentWord={words[wordIndex]}
               wpm={wpm}
               fontFamily={fontFamily}
               fontSize={fontSize}
+              textMetadata={{
+                title: currentText.title,
+                wordCount: words.length,
+                id: currentText.id
+              }}
             />
           ) : (
             <motion.div 
@@ -145,7 +190,7 @@ const ModeCard = ({ layoutId, title, onClick }) => (
   <motion.div 
     layoutId={layoutId}
     onClick={onClick}
-    className="flex-1 h-[50%] bg-c-secondary rounded-[2.5rem] flex items-center justify-center cursor-pointer hover:bg-c-secondary/80 transition-colors duration-500"
+    className="flex-1 h-[100%] bg-c-secondary rounded-[2.5rem] flex items-center justify-center cursor-pointer hover:bg-c-secondary/80 transition-colors duration-500"
   >
     <motion.h3 
       layoutId={layoutId === "shared-reader-frame" ? "shared-reader-text" : undefined}

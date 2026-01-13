@@ -1,14 +1,14 @@
-import { Settings, User, Play, Square, SkipForward, ChevronLeft } from 'lucide-react';
+import { Settings, User, Play, Square, SkipForward, ChevronLeft, ArrowLeftRight, ArrowDownCircle, LucideArrowDownCircle, CircleSlash, PauseCircle, Shuffle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import { ProfilePopup } from './ProfilePopup'; 
 
-export const Header = ({ selectedMode, isPlaying, setIsPlaying, onBack, onOpenSettings }) => {
+export const Header = ({ selectedMode, isPlaying, setIsPlaying, onBack, onOpenSettings, onNext, onPrev }) => {
   const [isProfileOpen, setIsProfileOpen] = useState(false); 
 
   return (
     <header className="h-24 w-full flex justify-center bg-c-primary z-20 relative transition-colors duration-500">
-      <div className="w-[60%] min-w-[400px] grid grid-cols-3 items-center h-full">
+      <div className="w-[75%] min-w-[400px] grid grid-cols-3 items-center h-full">
         
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
@@ -31,14 +31,20 @@ export const Header = ({ selectedMode, isPlaying, setIsPlaying, onBack, onOpenSe
                 exit={{ scale: 0.8, opacity: 0 }}
                 className="flex items-center gap-6"
               >
-                <button className="text-slate-500 hover:text-white"><SkipForward size={18} className="rotate-180"/></button>
+                <button onClick={onPrev} className="text-slate-500 hover:text-white transition-colors">
+                  <SkipForward size={18} className="rotate-180"/>
+                </button>
+                
                 <button 
                   onClick={() => setIsPlaying(!isPlaying)}
                   className="w-12 h-12 bg-c-distinct rounded-full flex items-center justify-center text-white hover:shadow-[0_0_20px_rgba(var(--c-distinct),0.4)] transition-all"
                 >
                   {isPlaying ? <Square size={20} fill="white"/> : <Play size={20} fill="white" className="ml-1"/>}
                 </button>
-                <button className="text-slate-500 hover:text-white"><SkipForward size={18}/></button>
+
+                <button onClick={onNext} className="text-slate-500 hover:text-white transition-colors">
+                  <Shuffle size={18} />
+                </button>
               </motion.div>
             )}
           </AnimatePresence>
@@ -65,7 +71,6 @@ export const Header = ({ selectedMode, isPlaying, setIsPlaying, onBack, onOpenSe
                 )}
             </AnimatePresence>
           </div>
-
         </div>
       </div>  
     </header>

@@ -14,7 +14,7 @@ export const Footer = ({
 
   return (
     <footer className="h-32 w-full flex justify-center bg-c-primary z-10 transition-colors duration-500">
-      <div className="w-[60%] min-w-[400px] flex items-center justify-between">
+      <div className="w-[75%] min-w-[400px] flex items-center justify-between">
         
         <div className="flex flex-col items-start transition-opacity duration-500" style={{ opacity: showControls ? 1 : 0 }}>
           <div className="text-[0.7rem] font-bold text-c-light uppercase tracking-[2px] m-3">
