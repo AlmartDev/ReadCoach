@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 
-export const ReaderDisplay = ({ layoutId, currentWord, wpm, fontFamily, fontSize, textMetadata }) => {
+export const ReaderDisplay = ({ layoutId, currentWord, wpm, fontFamily, fontSize, textMetadata, isPlaying }) => {
   const centerFont = fontFamily === 'serif' ? '"Instrument Serif", serif' : fontFamily;
 
   return (
@@ -20,18 +20,19 @@ export const ReaderDisplay = ({ layoutId, currentWord, wpm, fontFamily, fontSize
         <pre className="font-sans">ID: {textMetadata.id}</pre>
       </motion.div>
 
-      <div className="w-full flex justify-center items-center px-12">
+      <div className="flex justify-center items-center w-full h-full pointer-events-none">
         <motion.div 
-          key={currentWord}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.05 }}
+          layoutId={isPlaying ? undefined : "shared-reader-text"}
+          key={isPlaying ? currentWord : "static-entry"}
+          initial={isPlaying ? { opacity: 1 } : { opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.2 }}
           className="tracking-[-0.1rem] select-none text-c-text-main text-center whitespace-nowrap"
           style={{ 
             fontFamily: centerFont,
             fontSize: `${fontSize}rem`,
             lineHeight: 1,
-            minWidth: "200px"
+            display: 'inline-block'
           }}
         >
           {currentWord}

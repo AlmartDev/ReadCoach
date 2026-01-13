@@ -12,14 +12,11 @@ function AppContent() {
   const [selectedMode, setSelectedMode] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  
   const [wpm, setWpm] = useState(250);
   const [fontFamily, setFontFamily] = useState('serif');
   const [fontSize, setFontSize] = useState(18);
-  
   const [isWpmModalOpen, setIsWpmModalOpen] = useState(false);
   const [isFontModalOpen, setIsFontModalOpen] = useState(false);
-
   const [currentText, setCurrentText] = useState(TEXT_LIBRARY.find(t => t.isWelcome) || TEXT_LIBRARY[0]);
   const [wordIndex, setWordIndex] = useState(0);
   const [history, setHistory] = useState([]);
@@ -89,12 +86,11 @@ function AppContent() {
         selectedMode={selectedMode} 
         isPlaying={isPlaying} 
         setIsPlaying={setIsPlaying} 
-        onBack={() => { setSelectedMode(null); setIsPlaying(false); }} 
+        onBack={() => { setSelectedMode(null); setIsPlaying(false); setWordIndex(0); }} 
         onOpenSettings={() => setIsSettingsOpen(true)}
         onNext={handleNextText}
         onPrev={handlePrevText}
       />
-
       <AnimatePresence>
         {isSettingsOpen && (
           <SettingsPopup 
@@ -105,7 +101,6 @@ function AppContent() {
           />
         )}
       </AnimatePresence>
-      
       <main className="flex-grow flex items-center justify-center relative px-4">
         <AnimatePresence mode="popLayout">
           {!selectedMode ? (
@@ -117,15 +112,8 @@ function AppContent() {
               transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
               className="flex gap-8 w-full max-w-[60%] h-[80%] absolute items-center justify-center"
             >
-              <ModeCard 
-                title="TUTORIAL" 
-                onClick={() => setSelectedMode('tutorial')} 
-              />
-              <ModeCard 
-                layoutId="shared-reader-frame" 
-                title="READ" 
-                onClick={() => setSelectedMode('reader')} 
-              />
+              <ModeCard title="TUTORIAL" onClick={() => setSelectedMode('tutorial')} />
+              <ModeCard layoutId="shared-reader-frame" title="READ" onClick={() => setSelectedMode('reader')} />
             </motion.div>
           ) : selectedMode === 'reader' ? (
             <ReaderDisplay 
@@ -135,6 +123,7 @@ function AppContent() {
               wpm={wpm}
               fontFamily={fontFamily}
               fontSize={fontSize}
+              isPlaying={isPlaying}
               textMetadata={{
                 title: currentText.title,
                 wordCount: words.length,
@@ -154,7 +143,6 @@ function AppContent() {
           )}
         </AnimatePresence>
       </main>
-
       <InputModal 
         isOpen={isWpmModalOpen}
         onClose={() => setIsWpmModalOpen(false)}
@@ -163,7 +151,6 @@ function AppContent() {
         type="number"
         onSubmit={(val) => setWpm(parseInt(val) || wpm)}
       />
-
       <InputModal 
         isOpen={isFontModalOpen}
         onClose={() => setIsFontModalOpen(false)}
@@ -172,7 +159,6 @@ function AppContent() {
         type="text"
         onSubmit={handleCustomFontSubmit}
       />
-
       <Footer 
         showControls={selectedMode === 'reader'} 
         wpm={wpm}
@@ -190,7 +176,7 @@ const ModeCard = ({ layoutId, title, onClick }) => (
   <motion.div 
     layoutId={layoutId}
     onClick={onClick}
-    className="flex-1 h-[100%] bg-c-secondary rounded-[2.5rem] flex items-center justify-center cursor-pointer hover:bg-c-secondary/80 transition-colors duration-500"
+    className="flex-1 h-[50%] bg-c-secondary rounded-[2.5rem] flex items-center justify-center cursor-pointer hover:bg-c-secondary/80 transition-colors duration-500"
   >
     <motion.h3 
       layoutId={layoutId === "shared-reader-frame" ? "shared-reader-text" : undefined}
