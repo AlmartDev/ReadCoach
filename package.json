@@ -1,0 +1,6 @@
+{
+  "name": "read-coach-root",
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build"
+  }
+}

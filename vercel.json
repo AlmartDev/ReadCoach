@@ -1,16 +1,14 @@
 {
   "version": 2,
   "public": true,
-  "cleanUrls": true,
-  "outputDirectory": "frontend/dist",
   "rewrites": [
     {
       "source": "/api/(.*)",
       "destination": "/api/index.py"
     },
     {
-      "source": "/(.*)",
-      "destination": "/frontend/dist/index.html"
+      "source": "/((?!api/).*)",
+      "destination": "/frontend/dist/$1"
     }
   ]
 }
