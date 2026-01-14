@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { X, Type, Zap, EyeOff, FocusIcon, Check } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 
-export const Settings = ({ isOpen, onClose, fontSize, setFontSize }) => {
+export const Settings = ({ isOpen, onClose, fontSize, setFontSize, isZenMode, setIsZenMode }) => {
   const { activeThemeId, setActiveThemeId, palettes } = useTheme();
 
   const sidebarVariants = {
@@ -35,55 +35,53 @@ export const Settings = ({ isOpen, onClose, fontSize, setFontSize }) => {
         animate="animate"
         exit="exit"
         transition={{ type: "tween", ease: "circOut", duration: 0.3 }}
-        className="relative w-full max-w-md h-full bg-c-primary pointer-events-auto rounded-[2.5rem] border border-white/10 shadow-2xl p-8 flex flex-col"
+        className="relative w-full max-w-sm bg-c-secondary border-l border-white/10 shadow-2xl h-full rounded-3xl p-8 pointer-events-auto flex flex-col justify-between overflow-y-auto"
       >
-        <div className="flex items-center justify-between mb-12">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-c-distinct/10 rounded-xl text-c-distinct">
-              <Type size={20} />
-            </div>
-            <h2 className="text-sm font-black uppercase tracking-[3px] text-c-light">Settings</h2>
+        <div className="space-y-8">
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-black uppercase tracking-[4px] text-c-light">Settings</h2>
+            <button onClick={onClose} className="text-c-light hover:text-white transition-colors">
+              <X size={20} />
+            </button>
           </div>
-          <button onClick={onClose} className="p-2 hover:bg-white/5 rounded-full text-c-light transition-colors">
-            <X size={20} />
-          </button>
-        </div>
 
-        <div className="flex-grow overflow-y-auto pr-2 space-y-10 custom-scrollbar">
-          <section>
-            <div className="flex items-center justify-between mb-4 text-c-light">
-              <span className="text-[10px] font-black uppercase tracking-[2px]">Font Size</span>
-              <span className="text-c-distinct font-black text-xs">{fontSize}rem</span>
+          <section className="space-y-4">
+            <div className="flex items-center gap-2 text-c-distinct">
+              <Type size={16} />
+              <h3 className="text-[10px] font-bold uppercase tracking-widest">Font Size</h3>
             </div>
-            <input 
-              type="range"
-              min="8"
-              max="30"
-              step="1"
-              value={fontSize}
-              onChange={(e) => setFontSize(e.target.value)}
-              className="w-full h-1.5 bg-c-light/20 rounded-lg appearance-none cursor-pointer accent-c-distinct"
-            />
+            <div className="bg-c-secondary/50 p-4 rounded-2xl border border-white/5 flex items-center gap-4">
+              <span className="text-xs text-c-light font-bold">A</span>
+              <input 
+                type="range" 
+                min="10" 
+                max="28" 
+                step="0.5" 
+                value={fontSize} 
+                onChange={(e) => setFontSize(parseFloat(e.target.value))}
+                className="w-full h-1 bg-c-light/20 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-c-distinct"
+              />
+              <span className="text-xl text-c-light font-bold">A</span>
+            </div>
           </section>
 
-          <section>
-            <h3 className="text-[10px] font-black uppercase tracking-[2px] text-c-light mb-6">Theme Palette</h3>
-            <div className="grid grid-cols-4 gap-4">
-              {palettes.map((palette) => (
+          <section className="space-y-4">
+             <div className="flex items-center gap-2 text-c-distinct">
+              <Zap size={16} />
+              <h3 className="text-[10px] font-bold uppercase tracking-widest">Theme</h3>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              {palettes.map(palette => (
                 <button
                   key={palette.id}
                   onClick={() => setActiveThemeId(palette.id)}
-                  className="relative group flex flex-col items-center gap-2"
+                  style={{ backgroundColor: palette.colors.primary }}
+                  className={`group relative p-3 rounded-xl border transition-all ${activeThemeId === palette.id ? 'border-c-distinct bg-white/5' : 'border-white/5 hover:border-white/10'}`}
                 >
-                  <div 
-                    className={`w-full aspect-square rounded-2xl border-2 transition-all duration-300 ${
-                      activeThemeId === palette.id ? 'border-c-distinct scale-105' : 'border-white/5'
-                    }`}
-                    style={{ backgroundColor: palette.colors.primary }}
-                  >
+                  <div className="flex items-center gap-2 mb-2">
                     {activeThemeId === palette.id && (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <Check size={16} className="text-c-distinct" strokeWidth={4} />
+                      <div className="absolute top-2 right-2">
+                        <Check size={12} className="text-c-distinct" strokeWidth={4} />
                       </div>
                     )}
                   </div>
@@ -96,8 +94,13 @@ export const Settings = ({ isOpen, onClose, fontSize, setFontSize }) => {
           </section>
 
           <section className="space-y-3">
-             <Toggle label="Zen Mode" icon={<EyeOff size={14}/>} />
-             <Toggle label="Show Background" icon={<FocusIcon size={14}/>} />
+             <Toggle 
+                label="Zen Mode" 
+                icon={<EyeOff size={14}/>} 
+                checked={isZenMode}
+                onChange={() => setIsZenMode(!isZenMode)}
+             />
+             <Toggle label="Show Background" icon={<FocusIcon size={14}/>} checked={true} onChange={() => {}} />
           </section>
         </div>
 
@@ -114,12 +117,20 @@ export const Settings = ({ isOpen, onClose, fontSize, setFontSize }) => {
   );
 };
 
-const Toggle = ({ label, icon }) => (
-    <label className="flex items-center justify-between w-full p-4 bg-c-secondary/50 rounded-2xl border border-white/5 cursor-pointer hover:border-white/10 transition-all">
+const Toggle = ({ label, icon, checked, onChange }) => (
+    <label className="flex items-center justify-between w-full p-4 bg-c-secondary/50 rounded-2xl border border-white/5 cursor-pointer hover:border-white/10 transition-all select-none">
         <div className="flex items-center gap-3 text-c-light">
             {icon}
             <span className="text-[10px] font-bold uppercase tracking-widest">{label}</span>
         </div>
-        <input type="checkbox" className="w-4 h-4 accent-c-distinct rounded border-white/10 bg-transparent" />
+        <div className="relative">
+            <input 
+                type="checkbox" 
+                className="sr-only peer"
+                checked={checked}
+                onChange={onChange}
+            />
+            <div className="w-9 h-5 bg-c-primary rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-c-distinct"></div>
+        </div>
     </label>
 );

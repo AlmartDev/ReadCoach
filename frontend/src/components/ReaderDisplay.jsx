@@ -9,7 +9,8 @@ export const ReaderDisplay = ({
   fontSize, 
   textMetadata, 
   isPlaying, 
-  onCustomTextClick
+  onCustomTextClick,
+  isZenMode
 }) => {
   const centerFont = fontFamily === 'serif' ? '"Instrument Serif", serif' : fontFamily;
 
@@ -17,12 +18,12 @@ export const ReaderDisplay = ({
     <motion.section 
       layoutId={layoutId}
       transition={{ type: "spring", bounce: 0.15, duration: 0.6 }}
-      className="w-[75%] min-w-[400px] h-[100%] bg-c-secondary rounded-[2.5rem] flex items-center justify-center relative transition-colors duration-500 overflow-hidden"
+      className="w-[75%] min-w-[700px] h-[100%] bg-c-secondary rounded-[2.5rem] flex items-center justify-center relative transition-colors duration-500 overflow-hidden"
     >
       <motion.div 
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.4 }}
+        animate={{ opacity: isZenMode ? 0 : 1 }}
+        transition={{ delay: 0.2 }}
         className="absolute top-20 left-20 text-sm text-c-text-main/30 tracking-[0.1em] font-sans pointer-events-none"
       >
         <pre className="font-sans uppercase font-bold">{textMetadata.title}</pre>
@@ -30,36 +31,33 @@ export const ReaderDisplay = ({
         <pre className="font-sans">ID: {textMetadata.id}</pre>
       </motion.div>
 
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center w-full">
-        {/*<div className="w-[2px] h-6 bg-c-distinct/40 mb-6 rounded-full" />*/}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <motion.div 
+            layoutId={isPlaying ? undefined : "shared-reader-text"}
+            key={isPlaying ? currentWord : "static-entry"}
+            initial={isPlaying ? { opacity: 1 } : { opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.2 }}
+            className="tracking-[-0.1rem] select-none text-c-text-main text-center whitespace-nowrap"
+            style={{ 
+                fontFamily: centerFont,
+                fontSize: `${fontSize}rem`,
+                lineHeight: 1,
+            }}
+        >
+            {currentWord}
+        </motion.div>
+      </div>
 
-        <div className="flex justify-center items-center w-full min-h-[1.2em]">
-            <motion.div 
-                layoutId={isPlaying ? undefined : "shared-reader-text"}
-                key={isPlaying ? currentWord : "static-entry"}
-                initial={isPlaying ? { opacity: 1 } : { opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.2 }}
-                className="tracking-[-0.1rem] select-none text-c-text-main text-center whitespace-nowrap"
-                style={{ 
-                    fontFamily: centerFont,
-                    fontSize: `${fontSize}rem`,
-                    lineHeight: 1,
-                    display: 'inline-block'
-                }}
-            >
-                {currentWord}
-            </motion.div>
-        </div>
-
+      <div className="absolute top-[calc(50%+11rem)] left-1/2 -translate-x-1/2 flex justify-center w-full pointer-events-none">
         <AnimatePresence>
-          {!isPlaying && (
+          {!isPlaying && !isZenMode && (
             <motion.button
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 5 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 10 }}
+              exit={{ opacity: 0, y: 5 }}
               onClick={onCustomTextClick}
-              className="mt-8 px-6 py-2 bg-c-primary border border-white/5 rounded-full flex items-center gap-2 text-c-light hover:text-c-distinct transition-all pointer-events-auto"
+              className="px-6 py-2 bg-c-primary border border-white/5 rounded-full flex items-center gap-2 text-c-text hover:text-c-distinct transition-all pointer-events-auto"
             >
               <Plus size={14} />
               <span className="text-[10px] font-black uppercase tracking-[2px]">Custom Text</span>
@@ -68,8 +66,10 @@ export const ReaderDisplay = ({
         </AnimatePresence>
       </div>
 
-      <div className="absolute inset-0 rounded-[2.5rem] pointer-events-none" />
-      {/*border-[1px] border-c-distinct/5*/}    
-      </motion.section>
+      <motion.div 
+        animate={{ opacity: isZenMode ? 0 : 1 }}
+        className="absolute inset-0 border border-c-distinct/5 rounded-[2.5rem] pointer-events-none" 
+      />
+    </motion.section>
   );
 };

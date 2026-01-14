@@ -27,7 +27,7 @@ export const Header = ({ selectedMode, isPlaying, setIsPlaying, onBack, onOpenSe
 
   return (
     <header className="h-24 w-full flex justify-center bg-c-primary z-20 relative transition-colors duration-500">
-      <div className="w-[75%] min-w-[400px] grid grid-cols-3 items-center h-full">
+      <div className="w-[75%] min-w-[700px] grid grid-cols-3 items-center h-full">
         
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
@@ -35,7 +35,7 @@ export const Header = ({ selectedMode, isPlaying, setIsPlaying, onBack, onOpenSe
               <h1 className="text-xl font-bold tracking-tighter text-c-light">READCOACH</h1>
           </div>
           {selectedMode && (
-            <button onClick={onBack} className="flex items-center gap-2 text-c-light hover:text-white transition-colors">
+            <button onClick={onBack} className="flex items-center gap-2 text-c-light hover:text-c-text-main transition-colors">
               <ChevronLeft size={20} /> <span className="text-xs font-bold uppercase tracking-widest">Back</span>
             </button>
           )}
@@ -50,7 +50,7 @@ export const Header = ({ selectedMode, isPlaying, setIsPlaying, onBack, onOpenSe
                 exit={{ scale: 0.8, opacity: 0 }}
                 className="flex items-center gap-6"
               >
-                <button onClick={onPrev} className="text-slate-500 hover:text-white transition-colors">
+                <button onClick={onPrev} className="text-c-light hover:text-c-text-main transition-colors">
                   <SkipForward size={18} className="rotate-180"/>
                 </button>
                 
@@ -61,7 +61,7 @@ export const Header = ({ selectedMode, isPlaying, setIsPlaying, onBack, onOpenSe
                   {isPlaying ? <Square size={20} fill="white"/> : <Play size={20} fill="white" className="ml-1"/>}
                 </button>
 
-                <button onClick={onNext} className="text-slate-500 hover:text-white transition-colors">
+                <button onClick={onNext} className="text-c-light hover:text-c-text-main transition-colors">
                   <Shuffle size={18} />
                 </button>
               </motion.div>
@@ -70,23 +70,23 @@ export const Header = ({ selectedMode, isPlaying, setIsPlaying, onBack, onOpenSe
         </div>
 
         <div className="flex justify-end items-center gap-3">
-          <button className="p-2 text-c-light hover:text-white">EN</button>
+          <button className="p-2 text-c-light hover:text-c-text-main">EN</button>
           <button 
             onClick={toggleFullscreen}
-            className="p-2 text-c-light hover:text-white transition-colors"
+            className="p-2 text-c-light hover:text-c-text-main transition-colors"
             title="Toggle Fullscreen"
           >
             {isFullscreen ? <Shrink size={20} /> : <Expand size={20} />}
           </button>
 
-          <button className="p-2 text-c-light hover:text-white" onClick={onOpenSettings}>
+          <button className="p-2 text-c-light hover:text-c-text-main" onClick={onOpenSettings}>
             <Settings size={20} />
           </button>
           
           <div className="relative">
             <button 
                 onClick={() => setIsProfileOpen(!isProfileOpen)}
-                className={`p-2 transition-colors ${isProfileOpen ? 'text-white bg-white/10 rounded-lg' : 'text-c-light hover:text-white'}`}
+                className={`p-2 transition-colors ${isProfileOpen ? 'text-white bg-white/10 rounded-lg' : 'text-c-light hover:text-c-text-main'}`}
             >
                 <User size={20} />
             </button>
