@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Settings as SettingsPopup } from './components/Settings'; 
 import { ThemeProvider } from './contexts/ThemeContext';
 import { InputModal } from './components/InputModal'; 
+import { TextInputModal } from './components/TextInputModal'; 
 import { TEXT_LIBRARY } from './data/texts';
 
 function AppContent() {
@@ -18,7 +19,16 @@ function AppContent() {
   const [fontSize, setFontSize] = useState(18);
   const [isWpmModalOpen, setIsWpmModalOpen] = useState(false);
   const [isFontModalOpen, setIsFontModalOpen] = useState(false);
-  const [currentText, setCurrentText] = useState(TEXT_LIBRARY.find(t => t.isWelcome) || TEXT_LIBRARY[0]);
+  const [isTextModalOpen, setIsTextModalOpen] = useState(false); // FIXED: Added missing state
+
+  const [currentText, setCurrentText] = useState(() => {
+    const welcomeOptions = TEXT_LIBRARY.filter(t => t.isWelcome);
+    if (welcomeOptions.length > 0) {
+      const randomIndex = Math.floor(Math.random() * welcomeOptions.length);
+      return welcomeOptions[randomIndex];
+    }
+    return TEXT_LIBRARY[0];
+  });
   const [wordIndex, setWordIndex] = useState(0);
   const [history, setHistory] = useState([]);
 
@@ -33,6 +43,18 @@ function AppContent() {
     setIsPlaying(false);
   }, [currentText]);
 
+  const handleCustomTextSubmit = (newContent) => {
+    if (!newContent.trim()) return;
+    setCurrentText({
+      id: `custom-${Date.now()}`,
+      title: "Custom Text",
+      content: newContent,
+      wordCount: newContent.split(/\s+/).length
+    });
+    setWordIndex(0);
+    setIsPlaying(false);
+  };
+
   const handlePrevText = useCallback(() => {
     if (history.length === 0) return;
     const lastText = history[history.length - 1];
@@ -43,10 +65,10 @@ function AppContent() {
   }, [history]);
 
   useEffect(() => {
-  const handleKeyDown = (e) => {
-    const isTyping = e.target.tagName === 'INPUT' || 
-                     e.target.tagName === 'TEXTAREA' || 
-                     e.target.isContentEditable;
+    const handleKeyDown = (e) => {
+      const isTyping = e.target.tagName === 'INPUT' || 
+                       e.target.tagName === 'TEXTAREA' || 
+                       e.target.isContentEditable;
 
       if (selectedMode !== 'reader' || isTyping) return;
 
@@ -77,8 +99,6 @@ function AppContent() {
           return prev + 1;
         });
       }, 60000 / wpm);
-    } else {
-      clearInterval(interval);
     }
     return () => clearInterval(interval);
   }, [isPlaying, wpm, wordIndex, words.length]);
@@ -115,6 +135,7 @@ function AppContent() {
         onNext={handleNextText}
         onPrev={handlePrevText}
       />
+      
       <main className="flex-grow flex items-center justify-center relative px-4">
         <AnimatePresence mode="popLayout">
           {!selectedMode ? (
@@ -143,12 +164,14 @@ function AppContent() {
                 wordCount: words.length,
                 id: currentText.id
               }}
+              onCustomTextClick={() => setIsTextModalOpen(true)} 
             />
           ) : (
             <motion.div key="tutorial" className="text-c-light">Tutorial Mode Active</motion.div>
           )}
         </AnimatePresence>
       </main>
+
       <Footer 
         showControls={selectedMode === 'reader'} 
         wpm={wpm}
@@ -159,11 +182,36 @@ function AppContent() {
         onOpenCustomFont={() => setIsFontModalOpen(true)}
       />
 
-      <InputModal isOpen={isWpmModalOpen} onClose={() => setIsWpmModalOpen(false)} title="Custom WPM" onSubmit={(v) => setWpm(parseInt(v))} />
-      <InputModal isOpen={isFontModalOpen} onClose={() => setIsFontModalOpen(false)} title="Google Font Name" type="text" onSubmit={handleCustomFontSubmit} />
+      <TextInputModal 
+        isOpen={isTextModalOpen} 
+        onClose={() => setIsTextModalOpen(false)} 
+        onSubmit={handleCustomTextSubmit} 
+      />
+      <InputModal 
+        isOpen={isWpmModalOpen} 
+        onClose={() => setIsWpmModalOpen(false)} 
+        title="Custom WPM" 
+        onSubmit={(v) => setWpm(parseInt(v))} 
+      />
+      <InputModal 
+        isOpen={isFontModalOpen} 
+        onClose={() => setIsFontModalOpen(false)} 
+        title="Google Font Name" 
+        type="text" 
+        onSubmit={handleCustomFontSubmit} 
+      />
+      
       <AnimatePresence>
-        {isSettingsOpen && <SettingsPopup isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} fontSize={fontSize} setFontSize={setFontSize} />}
+        {isSettingsOpen && (
+          <SettingsPopup 
+            isOpen={isSettingsOpen} 
+            onClose={() => setIsSettingsOpen(false)} 
+            fontSize={fontSize} 
+            setFontSize={setFontSize} 
+          />
+        )}
       </AnimatePresence>
+      
       <Analytics />
     </div>
   );
