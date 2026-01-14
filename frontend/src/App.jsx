@@ -141,14 +141,33 @@ function AppContent() {
           {!selectedMode ? (
             <motion.div 
               key="selection-grid"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
-              className="flex gap-8 w-full max-w-[60%] h-[80%] absolute items-center justify-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="w-full h-full absolute inset-0 flex justify-center py-12"
             >
-              <ModeCard title="TUTORIAL" onClick={() => setSelectedMode('tutorial')} />
-              <ModeCard layoutId="shared-reader-frame" title="READ" onClick={() => setSelectedMode('reader')} />
+              <div className="w-[75%] min-w-[400px] h-full flex gap-8">
+                
+                <div className="flex-[4] h-full">
+                    <ModeCard 
+                      title="TUTORIAL" 
+                      variant="outline"
+                      description="Learn how to master focus and speed reading."
+                      onClick={() => setSelectedMode('tutorial')} 
+                    />
+                </div>
+                
+                <div className="flex-[8] h-full">
+                    <ModeCard 
+                      layoutId="shared-reader-frame" 
+                      title="READ" 
+                      variant="solid"
+                      subtext="Speed Reading Sandbox"
+                      onClick={() => setSelectedMode('reader')} 
+                    />
+                </div>
+
+              </div>
             </motion.div>
           ) : selectedMode === 'reader' ? (
             <ReaderDisplay 
@@ -219,16 +238,58 @@ function AppContent() {
   );
 }
 
-const ModeCard = ({ layoutId, title, onClick }) => (
-  <motion.div 
-    layoutId={layoutId}
-    onClick={onClick}
-    className="flex-1 h-[50%] bg-c-secondary rounded-[2.5rem] flex items-center justify-center cursor-pointer hover:bg-c-secondary/80 transition-colors duration-500"
-  >
-    <motion.h3 layoutId={layoutId === "shared-reader-frame" ? "shared-reader-text" : undefined} className="text-2xl font-black tracking-[4px] text-c-distinct">
-      {title}
-    </motion.h3>
-  </motion.div>
-);
+const ModeCard = ({ layoutId, title, subtext, description, onClick, variant }) => {
+  const isSolid = variant === "solid";
+  
+  return (
+    <motion.div 
+      layoutId={layoutId}
+      onClick={onClick}
+      whileHover="hover"
+      initial="initial"
+      className={`relative w-full h-full flex flex-col cursor-pointer transition-all duration-500 rounded-[3rem] p-12
+        ${isSolid 
+          ? 'bg-c-distinct text-white justify-end shadow-xl' 
+          : 'bg-transparent border-2 border-c-secondary text-c-light justify-start hover:bg-c-secondary/20'}`}
+    >
+      {isSolid ? (
+        <>
+          <div className="absolute top-12 left-12 w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center">
+            <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+          </div>
+          <div className="z-10">
+            <motion.h3 
+              layoutId={layoutId === "shared-reader-frame" ? "shared-reader-text" : undefined}
+              className="text-9xl font-black tracking-tighter leading-none"
+            >
+              {title}
+            </motion.h3>
+            <p className="mt-4 text-xs font-black uppercase tracking-[0.4em] opacity-60">
+              {subtext}
+            </p>
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="z-10">
+            <h3 className="text-6xl font-black tracking-tighter leading-none text-c-text-main">
+              {title}
+            </h3>
+            <div className="w-12 h-1 bg-c-distinct mt-6 mb-8 rounded-full" />
+            <p className="text-sm font-medium leading-relaxed opacity-40 max-w-[180px]">
+              {description}
+            </p>
+          </div>
+        </>
+      )}
+
+      <motion.div 
+        variants={{ hover: { opacity: 1 } }}
+        initial={{ opacity: 0 }}
+        className="absolute inset-0 bg-white/5 rounded-[3rem] pointer-events-none"
+      />
+    </motion.div>
+  );
+};
 
 export default function App() { return (<ThemeProvider><AppContent /></ThemeProvider>); }
