@@ -57,7 +57,7 @@ export const ReaderDisplay = ({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 5 }}
               onClick={onCustomTextClick}
-              className="px-6 py-2 bg-c-primary border border-white/5 rounded-full flex items-center gap-2 text-c-text hover:text-c-distinct transition-all pointer-events-auto"
+              className="px-6 py-2 bg-c-primary/15 border border-white/5 rounded-full flex items-center gap-2 text-c-text hover:text-c-distinct transition-all pointer-events-auto"
             >
               <Plus size={14} />
               <span className="text-[10px] font-black uppercase tracking-[2px]">Custom Text</span>

@@ -177,6 +177,8 @@ function AppContent() {
         wpm={wpm}
         setWpm={setWpm}
         fontFamily={fontFamily}
+        fontSize={fontSize}
+        setFontSize={setFontSize}
         setFontFamily={setFontFamily}
         onOpenCustomWpm={() => setIsWpmModalOpen(true)}
         onOpenCustomFont={() => setIsFontModalOpen(true)}
