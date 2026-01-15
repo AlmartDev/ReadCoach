@@ -9,6 +9,7 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import { InputModal } from './components/InputModal'; 
 import { TextInputModal } from './components/TextInputModal'; 
 import { TEXT_LIBRARY } from './data/texts';
+import { GuideView } from './Guide';
 
 function AppContent() {
   const [selectedMode, setSelectedMode] = useState(null);
@@ -19,7 +20,7 @@ function AppContent() {
   const [fontSize, setFontSize] = useState(18);
   const [isWpmModalOpen, setIsWpmModalOpen] = useState(false);
   const [isFontModalOpen, setIsFontModalOpen] = useState(false);
-  const [isTextModalOpen, setIsTextModalOpen] = useState(false); // FIXED: Added missing state
+  const [isTextModalOpen, setIsTextModalOpen] = useState(false); 
 
   const [currentText, setCurrentText] = useState(() => {
     const welcomeOptions = TEXT_LIBRARY.filter(t => t.isWelcome);
@@ -125,19 +126,32 @@ function AppContent() {
   };
 
   return (
-    <div className="flex flex-col h-screen w-full bg-c-primary text-c-text-main font-sans overflow-hidden transition-colors duration-500">
-      <Header 
-        selectedMode={selectedMode} 
-        isPlaying={isPlaying} 
-        setIsPlaying={setIsPlaying} 
-        onBack={() => { setSelectedMode(null); setIsPlaying(false); setWordIndex(0); }} 
-        onOpenSettings={() => setIsSettingsOpen(true)}
-        onNext={handleNextText}
-        onPrev={handlePrevText}
-      />
+    <div className={`flex flex-col h-screen w-full font-sans overflow-hidden transition-colors duration-500 
+      ${selectedMode === 'tutorial' ? 'bg-c-secondary' : 'bg-c-primary'}`}>
+      
+      <AnimatePresence>
+        {selectedMode !== 'tutorial' && (
+          <motion.div 
+            initial={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="z-10"
+          >
+            <Header 
+              selectedMode={selectedMode} 
+              isPlaying={isPlaying} 
+              setIsPlaying={setIsPlaying} 
+              onBack={() => { setSelectedMode(null); setIsPlaying(false); setWordIndex(0); }} 
+              onOpenSettings={() => setIsSettingsOpen(true)}
+              onNext={handleNextText}
+              onPrev={handlePrevText}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
       
       <main className="flex-grow flex items-center justify-center relative px-4">
-        <AnimatePresence mode="popLayout">
+        <AnimatePresence mode="wait">
           {!selectedMode ? (
             <motion.div 
               key="selection-grid"
@@ -147,7 +161,6 @@ function AppContent() {
               className="w-full h-full absolute inset-0 flex justify-center py-12"
             >
               <div className="w-[75%] min-w-[400px] h-full flex gap-8">
-                
                 <div className="flex-[4] h-full">
                     <ModeCard 
                       title="TUTORIAL" 
@@ -156,7 +169,6 @@ function AppContent() {
                       onClick={() => setSelectedMode('tutorial')} 
                     />
                 </div>
-                
                 <div className="flex-[8] h-full">
                     <ModeCard 
                       layoutId="shared-reader-frame" 
@@ -166,7 +178,6 @@ function AppContent() {
                       onClick={() => setSelectedMode('reader')} 
                     />
                 </div>
-
               </div>
             </motion.div>
           ) : selectedMode === 'reader' ? (
@@ -185,23 +196,36 @@ function AppContent() {
               }}
               onCustomTextClick={() => setIsTextModalOpen(true)} 
             />
-          ) : (
-            <motion.div key="tutorial" className="text-c-light">Tutorial Mode Active</motion.div>
-          )}
+          ) : selectedMode === 'tutorial' ? (
+            <GuideView 
+              key="tutorial-view"
+              onBack={() => setSelectedMode(null)} 
+            />
+          ) : null}
         </AnimatePresence>
       </main>
 
-      <Footer 
-        showControls={selectedMode === 'reader'} 
-        wpm={wpm}
-        setWpm={setWpm}
-        fontFamily={fontFamily}
-        fontSize={fontSize}
-        setFontSize={setFontSize}
-        setFontFamily={setFontFamily}
-        onOpenCustomWpm={() => setIsWpmModalOpen(true)}
-        onOpenCustomFont={() => setIsFontModalOpen(true)}
-      />
+      <AnimatePresence>
+        {selectedMode !== 'tutorial' && (
+          <motion.div
+            initial={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Footer 
+              showControls={selectedMode === 'reader'} 
+              wpm={wpm}
+              setWpm={setWpm}
+              fontFamily={fontFamily}
+              fontSize={fontSize}
+              setFontSize={setFontSize}
+              setFontFamily={setFontFamily}
+              onOpenCustomWpm={() => setIsWpmModalOpen(true)}
+              onOpenCustomFont={() => setIsFontModalOpen(true)}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <TextInputModal 
         isOpen={isTextModalOpen} 

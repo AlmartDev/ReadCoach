@@ -39,7 +39,7 @@ export const TextInputModal = ({ isOpen, onClose, onSubmit }) => {
               <div className="flex items-center gap-2">
                 <AlignLeft size={14} className="text-c-distinct" />
                 <h3 className="text-[10px] font-black uppercase tracking-[2px] text-c-light">
-                  Paste Custom Content
+                  Paste Custom Content, This Information Won't Be Saved
                 </h3>
               </div>
               <button onClick={onClose} className="text-c-light hover:text-white transition-colors">

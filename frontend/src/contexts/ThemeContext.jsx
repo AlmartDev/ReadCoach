@@ -12,7 +12,7 @@ export const PALETTES = [
   { id: 'lightmode', name: 'Light', colors: { primary: '#ffffff', secondary: '#ffffff', light: '#131313', distinct: '#be8f8f', text: '#000000' } },
   { id: 'coffee', name: 'Espresso', colors: { primary: '#271c19', secondary: '#443632', light: '#d7ccc8', distinct: '#a1887f', text: '#FFFFFF' } },
   { id: 'rose', name: 'Rose Gold', colors: { primary: '#4c0519', secondary: '#881337', light: '#fecdd3', distinct: '#fb7185', text: '#FFFFFF' } },
-  { id: 'sun', name: 'Sunlight', colors: { primary: '#d9a90b', secondary: '#d9a90b', light: '#131313', distinct: '#ca6642', text: '#000000'} },
+  { id: 'sun', name: 'Sunlight', colors: { primary: '#d9a90b', secondary: '#d9a90b', light: '#131313', distinct: '#FF9B00', text: '#000000'} },
   { id: 'smooth', name: 'Smooth', colors: { primary: '#7C444F', secondary: '#9F5255', light: '#F39E60', distinct: '#E16A54', text: '#FFFFFF'} }, // https://colorhunt.co/palette/7c444f9f5255e16a54f39e60
 ];
 

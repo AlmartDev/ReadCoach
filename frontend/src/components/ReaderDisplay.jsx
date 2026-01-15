@@ -68,7 +68,7 @@ export const ReaderDisplay = ({
 
       <motion.div 
         animate={{ opacity: isZenMode ? 0 : 1 }}
-        className="absolute inset-0 border border-c-distinct/5 rounded-[2.5rem] pointer-events-none" 
+        className="absolute inset-0 rounded-[2.5rem] pointer-events-none" 
       />
     </motion.section>
   );
