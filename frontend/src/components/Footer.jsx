@@ -9,7 +9,8 @@ export const Footer = ({
   fontSize,
   setFontSize,
   onOpenCustomWpm, 
-  onOpenCustomFont 
+  onOpenCustomFont,
+  onOpenEasterEgg
 }) => {
   const fonts = ['Arial', 'Verdana', 'serif'];
   const wpms = [200, 250, 300, 350, 400, 500];
@@ -87,7 +88,15 @@ export const Footer = ({
         </div>
 
         <div className="flex items-center gap-1.5">
-          <h2 className="text-[0.65rem] font-medium text-c-light tracking-[2px]">Made by @AlmartDev with &lt;3</h2>
+          <h2 className="text-[0.65rem] font-medium text-c-light tracking-[2px]">
+            Made by @AlmartDev with 
+            <button 
+              onClick={onOpenEasterEgg} 
+              className="ml-1 transition-all active:scale-90"
+            >
+              &lt;3
+            </button>
+          </h2>
           <a href="https://flavortown.hackclub.com/projects/7483" className="p-2 text-c-light hover:text-c-text-main transition-colors">
               <HeartHandshake size={18}/>
           </a>

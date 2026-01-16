@@ -1,14 +1,18 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Analytics } from '@vercel/analytics/react';
+import { motion, AnimatePresence } from 'framer-motion';
+
 import { Header } from './components/Header';
 import { ReaderDisplay } from './components/ReaderDisplay';
-import { Footer } from './components/Footer';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Settings as SettingsPopup } from './components/Settings'; 
-import { ThemeProvider } from './contexts/ThemeContext';
+import { Footer } from './components/Footer';
 import { InputModal } from './components/InputModal'; 
 import { TextInputModal } from './components/TextInputModal'; 
+import { EasterEgg } from './components/EasterEgg';
+
+import { ThemeProvider } from './contexts/ThemeContext';
 import { TEXT_LIBRARY } from './data/texts';
+
 import { GuideView } from './Guide';
 
 function AppContent() {
@@ -27,6 +31,7 @@ function AppContent() {
   const [isWpmModalOpen, setIsWpmModalOpen] = useState(false);
   const [isFontModalOpen, setIsFontModalOpen] = useState(false);
   const [isTextModalOpen, setIsTextModalOpen] = useState(false); 
+  const [isEasterEggOpen, setIsEasterEggOpen] = useState(false);
 
   const isZenActive = isZenMode && isPlaying;
 
@@ -242,6 +247,7 @@ function AppContent() {
               setFontFamily={setFontFamily}
               onOpenCustomWpm={() => setIsWpmModalOpen(true)}
               onOpenCustomFont={() => setIsFontModalOpen(true)}
+              onOpenEasterEgg={() => setIsEasterEggOpen(true)}
             />
           </motion.div>
         )}
@@ -266,6 +272,11 @@ function AppContent() {
         onSubmit={handleCustomFontSubmit} 
       />
       
+      <EasterEgg 
+        isOpen={isEasterEggOpen} 
+        onClose={() => setIsEasterEggOpen(false)} 
+      />
+
       <AnimatePresence>
         {isSettingsOpen && (
           <SettingsPopup 
