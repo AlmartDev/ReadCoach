@@ -90,6 +90,11 @@ function AppContent() {
         e.preventDefault();
         handleNextText();
       }
+
+      if (e.code == 'Escape') {
+        e.preventDefault();
+        setIsZenMode(false);
+      }
     };
 
     window.addEventListener('keydown', handleKeyDown);
@@ -174,7 +179,7 @@ function AppContent() {
                     <ModeCard 
                       title="TUTORIAL" 
                       variant="outline"
-                      description="Learn how to master focus and speed reading."
+                      description="Learn how the method works!"
                       onClick={() => setSelectedMode('tutorial')} 
                     />
                 </div>
@@ -212,6 +217,7 @@ function AppContent() {
           ) : selectedMode === 'tutorial' ? (
             <GuideView 
               key="tutorial-view"
+              onStart={() => setSelectedMode('reader')}
               onBack={() => setSelectedMode(null)} 
             />
           ) : null}
