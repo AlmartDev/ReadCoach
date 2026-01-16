@@ -1,9 +1,22 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { X, Type, Zap, EyeOff, FocusIcon, Check } from 'lucide-react';
+import { X, Type, Zap, EyeOff, FocusIcon, Check, ScanEye } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 
-export const Settings = ({ isOpen, onClose, fontSize, setFontSize, isZenMode, setIsZenMode }) => {
+export const Settings = ({ 
+  isOpen, 
+  onClose, 
+  fontSize, 
+  setFontSize, 
+  isZenMode, 
+  setIsZenMode,
+  showBackground,
+  setShowBackground,
+  colorCenterWord,
+  setColorCenterWord,
+  highlightColor,
+  setHighlightColor
+}) => {
   const { activeThemeId, setActiveThemeId, palettes } = useTheme();
 
   const sidebarVariants = {
@@ -100,7 +113,35 @@ export const Settings = ({ isOpen, onClose, fontSize, setFontSize, isZenMode, se
                 checked={isZenMode}
                 onChange={() => setIsZenMode(!isZenMode)}
              />
-             <Toggle label="Show Background" icon={<FocusIcon size={14}/>} checked={true} onChange={() => {}} />
+             <Toggle 
+                label="Show Background" 
+                icon={<FocusIcon size={14}/>} 
+                checked={showBackground} 
+                onChange={() => setShowBackground(!showBackground)} 
+             />
+             <Toggle 
+                label="Color Center Word" 
+                icon={<ScanEye size={14}/>} 
+                checked={colorCenterWord} 
+                onChange={() => setColorCenterWord(!colorCenterWord)} 
+             />
+
+             {colorCenterWord && (
+               <motion.div 
+                 initial={{ opacity: 0, height: 0 }}
+                 animate={{ opacity: 1, height: 'auto' }}
+                 exit={{ opacity: 0, height: 0 }}
+                 className="flex items-center justify-between p-4 bg-c-secondary/50 rounded-2xl border border-white/5"
+               >
+                 <span className="text-[10px] font-bold uppercase tracking-widest text-c-light">Highlight Color</span>
+                 <input 
+                   type="color" 
+                   value={highlightColor}
+                   onChange={(e) => setHighlightColor(e.target.value)}
+                   className="w-8 h-8 rounded-lg cursor-pointer bg-transparent border-none"
+                 />
+               </motion.div>
+             )}
           </section>
         </div>
 

@@ -2,23 +2,61 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Plus } from 'lucide-react';
 
 export const ReaderDisplay = ({ 
+  currentWord = "",
   layoutId, 
-  currentWord, 
   wpm, 
   fontFamily, 
   fontSize, 
   textMetadata, 
   isPlaying, 
   onCustomTextClick,
-  isZenMode
+  isZenMode,
+  showBackground,
+  colorCenterWord, 
+  highlightColor
 }) => {
   const centerFont = fontFamily === 'serif' ? '"Instrument Serif", serif' : fontFamily;
+
+  const renderWord = () => {
+    const wordStr = String(currentWord || "");
+    if (!wordStr) return "";
+
+    if (!colorCenterWord) {
+      return wordStr;
+    }
+
+    const midIndex = Math.floor(wordStr.length / 2);
+    const start = wordStr.substring(0, midIndex);
+    const pivot = wordStr[midIndex];
+    const end = wordStr.substring(midIndex + 1);
+
+    return (
+      <div className="flex items-center justify-center w-full">
+        <div className="flex-1 flex justify-end">
+          <span className="text-right">{start}</span>
+        </div>
+        
+        <span 
+          style={{ color: highlightColor }} 
+          className="shrink-0"
+        >
+          {pivot}
+        </span>
+        
+        <div className="flex-1 flex justify-start">
+          <span className="text-left">{end}</span>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <motion.section 
       layoutId={layoutId}
       transition={{ type: "spring", bounce: 0.15, duration: 0.6 }}
-      className="w-[75%] min-w-[700px] h-[100%] bg-c-secondary rounded-[2.5rem] flex items-center justify-center relative transition-colors duration-500 overflow-hidden"
+      className="w-[75%] min-w-[700px] h-[100%] rounded-[2.5rem] flex items-center justify-center relative transition-colors duration-500 overflow-hidden ${
+        showBackground ? 'bg-c-secondary' : 'bg-c-primary'
+      }"
     >
       <motion.div 
         initial={{ opacity: 0 }}
@@ -26,9 +64,9 @@ export const ReaderDisplay = ({
         transition={{ delay: 0.2 }}
         className="absolute top-20 left-20 text-sm text-c-text-main/30 tracking-[0.1em] font-sans pointer-events-none"
       >
-        <pre className="font-sans uppercase font-bold">{textMetadata.title}</pre>
-        <pre className="font-sans">{textMetadata.wordCount} WORDS · {wpm} WPM · SIZE: {fontSize}</pre>
-        <pre className="font-sans">ID: {textMetadata.id}</pre>
+        <pre className="font-sans uppercase font-bold">{textMetadata?.title}</pre>
+        <pre className="font-sans">{textMetadata?.wordCount} WORDS · {wpm} WPM · SIZE: {fontSize}</pre>
+        <pre className="font-sans">ID: {textMetadata?.id}</pre>
       </motion.div>
 
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -38,18 +76,18 @@ export const ReaderDisplay = ({
             initial={isPlaying ? { opacity: 1 } : { opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.2 }}
-            className="tracking-[-0.1rem] select-none text-c-text-main text-center whitespace-nowrap"
+            className="select-none text-c-text-main text-center whitespace-nowrap flex items-center justify-center ${colorCenterWord ? 'w-full px-12' : ''}"
             style={{ 
                 fontFamily: centerFont,
                 fontSize: `${fontSize}rem`,
                 lineHeight: 1,
             }}
         >
-            {currentWord}
+            {renderWord()}
         </motion.div>
       </div>
 
-      <div className="absolute top-[calc(50%+11rem)] left-1/2 -translate-x-1/2 flex justify-center w-full pointer-events-none">
+      <div className="absolute top-[calc(50%+11rem)] left-1/2 -translate-x-1/2 flex justify-center w-full pointer-events-auto">
         <AnimatePresence>
           {!isPlaying && !isZenMode && (
             <motion.button
@@ -57,7 +95,7 @@ export const ReaderDisplay = ({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 5 }}
               onClick={onCustomTextClick}
-              className="px-6 py-2 bg-c-primary/15 border border-white/5 rounded-full flex items-center gap-2 text-c-text hover:text-c-distinct transition-all pointer-events-auto"
+              className="px-6 py-2 bg-c-primary/15 border border-white/5 rounded-full flex items-center gap-2 text-c-text hover:text-c-distinct transition-all"
             >
               <Plus size={14} />
               <span className="text-[10px] font-black uppercase tracking-[2px]">Custom Text</span>

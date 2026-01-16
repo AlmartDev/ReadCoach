@@ -15,12 +15,20 @@ function AppContent() {
   const [selectedMode, setSelectedMode] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  
+  const [isZenMode, setIsZenMode] = useState(false); 
+  const [showBackground, setShowBackground] = useState(true);
+  const [colorCenterWord, setColorCenterWord] = useState(false);
+  const [highlightColor, setHighlightColor] = useState('#ff0000');
+
   const [wpm, setWpm] = useState(250);
   const [fontFamily, setFontFamily] = useState('serif');
   const [fontSize, setFontSize] = useState(18);
   const [isWpmModalOpen, setIsWpmModalOpen] = useState(false);
   const [isFontModalOpen, setIsFontModalOpen] = useState(false);
   const [isTextModalOpen, setIsTextModalOpen] = useState(false); 
+
+  const isZenActive = isZenMode && isPlaying;
 
   const [currentText, setCurrentText] = useState(() => {
     const welcomeOptions = TEXT_LIBRARY.filter(t => t.isWelcome);
@@ -86,7 +94,7 @@ function AppContent() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedMode, handleNextText]);
+  }, [selectedMode, handleNextText, isZenMode]);
 
   useEffect(() => {
     let interval = null;
@@ -145,12 +153,13 @@ function AppContent() {
               onOpenSettings={() => setIsSettingsOpen(true)}
               onNext={handleNextText}
               onPrev={handlePrevText}
+              isZenMode={isZenActive}
             />
           </motion.div>
         )}
       </AnimatePresence>
       
-      <main className="flex-grow flex items-center justify-center relative px-4">
+      <main className="flex-grow flex items-center justify-center relative px-4 transition-all duration-500 ${!isZenActive ? 'mb-0' : 'mb-12'}">
         <AnimatePresence mode="wait">
           {!selectedMode ? (
             <motion.div 
@@ -195,6 +204,10 @@ function AppContent() {
                 id: currentText.id
               }}
               onCustomTextClick={() => setIsTextModalOpen(true)} 
+              isZenMode={isZenActive} // Use isZenActive for layout changes
+              showBackground={showBackground}
+              colorCenterWord={colorCenterWord}
+              highlightColor={highlightColor}
             />
           ) : selectedMode === 'tutorial' ? (
             <GuideView 
@@ -206,11 +219,12 @@ function AppContent() {
       </main>
 
       <AnimatePresence>
-        {selectedMode !== 'tutorial' && (
+        {selectedMode !== 'tutorial' && !isZenActive && (
           <motion.div
-            initial={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            transition={{ duration: 0.3 }}
+            initial={{ opacity: 0, height: 0, overflow: 'hidden' }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}
           >
             <Footer 
               showControls={selectedMode === 'reader'} 
@@ -253,6 +267,14 @@ function AppContent() {
             onClose={() => setIsSettingsOpen(false)} 
             fontSize={fontSize} 
             setFontSize={setFontSize} 
+            isZenMode={isZenMode} 
+            setIsZenMode={setIsZenMode}
+            showBackground={showBackground}
+            setShowBackground={setShowBackground}
+            colorCenterWord={colorCenterWord}
+            setColorCenterWord={setColorCenterWord}
+            highlightColor={highlightColor}
+            setHighlightColor={setHighlightColor}
           />
         )}
       </AnimatePresence>

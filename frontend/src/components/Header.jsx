@@ -1,12 +1,21 @@
-import { Settings, User, Play, Square, SkipForward, ChevronLeft, Maximize, Minimize, Shrink, Expand, Shuffle } from 'lucide-react'; // Added Maximize/Minimize
+import { Settings, User, Play, Square, SkipForward, ChevronLeft, Shrink, Expand, Shuffle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { ProfilePopup } from './ProfilePopup'; 
 
-export const Header = ({ selectedMode, isPlaying, setIsPlaying, onBack, onOpenSettings, onNext, onPrev }) => {
+export const Header = ({ 
+  selectedMode, 
+  isPlaying, 
+  setIsPlaying, 
+  onBack, 
+  onOpenSettings, 
+  onNext, 
+  onPrev,
+  isZenMode
+}) => {
   const [isProfileOpen, setIsProfileOpen] = useState(false); 
-  
   const [isFullscreen, setIsFullscreen] = useState(false); 
+
   useEffect(() => {
     const handleFullscreenChange = () => {
       setIsFullscreen(!!document.fullscreenElement);
@@ -25,11 +34,20 @@ export const Header = ({ selectedMode, isPlaying, setIsPlaying, onBack, onOpenSe
     }
   };
 
+  const fadeVariant = {
+    visible: { opacity: 1, pointerEvents: 'auto' },
+    hidden: { opacity: 0, pointerEvents: 'none' }
+  };
+
   return (
     <header className="h-24 w-full flex justify-center bg-c-primary z-20 relative transition-colors duration-500">
       <div className="w-[75%] min-w-[700px] grid grid-cols-3 items-center h-full">
         
-        <div className="flex items-center gap-4">
+        <motion.div 
+          variants={fadeVariant}
+          animate={isZenMode ? "hidden" : "visible"}
+          className="flex items-center gap-4"
+        >
           <div className="flex items-center gap-2">
               <div className="w-8 h-8 bg-c-distinct rounded-lg flex items-center justify-center font-black text-white">R</div>
               <h1 className="text-xl font-bold tracking-tighter text-c-light">READCOACH</h1>
@@ -39,7 +57,7 @@ export const Header = ({ selectedMode, isPlaying, setIsPlaying, onBack, onOpenSe
               <ChevronLeft size={20} /> <span className="text-xs font-bold uppercase tracking-widest">Back</span>
             </button>
           )}
-        </div>
+        </motion.div>
 
         <div className="flex justify-center">
           <AnimatePresence>
@@ -69,7 +87,11 @@ export const Header = ({ selectedMode, isPlaying, setIsPlaying, onBack, onOpenSe
           </AnimatePresence>
         </div>
 
-        <div className="flex justify-end items-center gap-3">
+        <motion.div 
+          variants={fadeVariant}
+          animate={isZenMode ? "hidden" : "visible"}
+          className="flex justify-end items-center gap-3"
+        >
           <button className="p-2 text-c-light hover:text-c-text-main">EN</button>
           <button 
             onClick={toggleFullscreen}
@@ -97,7 +119,7 @@ export const Header = ({ selectedMode, isPlaying, setIsPlaying, onBack, onOpenSe
                 )}
             </AnimatePresence>
           </div>
-        </div>
+        </motion.div>
       </div>  
     </header>
   );
