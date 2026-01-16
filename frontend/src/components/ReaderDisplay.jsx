@@ -54,9 +54,9 @@ export const ReaderDisplay = ({
     <motion.section 
       layoutId={layoutId}
       transition={{ type: "spring", bounce: 0.15, duration: 0.6 }}
-      className="w-[75%] min-w-[700px] h-[100%] rounded-[2.5rem] flex items-center justify-center relative transition-colors duration-500 overflow-hidden ${
+      className={`w-[75%] min-w-[700px] h-[100%] rounded-[2.5rem] flex items-center justify-center relative transition-colors duration-500 overflow-hidden ${
         showBackground ? 'bg-c-secondary' : 'bg-c-primary'
-      }"
+      }`}
     >
       <motion.div 
         initial={{ opacity: 0 }}
@@ -76,7 +76,7 @@ export const ReaderDisplay = ({
             initial={isPlaying ? { opacity: 1 } : { opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.2 }}
-            className="select-none text-c-text-main text-center whitespace-nowrap flex items-center justify-center ${colorCenterWord ? 'w-full px-12' : ''}"
+            className={`select-none text-c-text-main text-center whitespace-nowrap flex items-center justify-center ${colorCenterWord ? 'w-full px-12' : ''}`}
             style={{ 
                 fontFamily: centerFont,
                 fontSize: `${fontSize}rem`,

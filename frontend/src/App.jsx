@@ -159,7 +159,7 @@ function AppContent() {
         )}
       </AnimatePresence>
       
-      <main className="flex-grow flex items-center justify-center relative px-4 transition-all duration-500 ${!isZenActive ? 'mb-0' : 'mb-12'}">
+      <main className={`flex-grow flex items-center justify-center relative px-4 transition-all duration-500 ${!isZenActive ? 'mb-0' : 'mb-12'}`}>
         <AnimatePresence mode="wait">
           {!selectedMode ? (
             <motion.div 
