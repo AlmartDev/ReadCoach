@@ -5,7 +5,7 @@ import { Check, X, Lock } from 'lucide-react';
 const SECRET_KEY = "42"; // YOU SHOULDN'T HAVE SEEN THIS!
 const IMAGE_URL = "https://i.imgflip.com/6xa5ku.jpg";
 
-export const EasterEgg = ({ isOpen, onClose }) => {
+export const SecretModal = ({ isOpen, onClose }) => {
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [value, setValue] = useState("");
   const [shake, setShake] = useState(false);

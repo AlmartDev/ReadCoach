@@ -1,6 +1,5 @@
-import React from 'react';
 import { motion } from 'framer-motion';
-import { LogOut, User, BarChart2 } from 'lucide-react';
+import { LogOut, BarChart2 } from 'lucide-react';
 
 export const ProfilePopup = ({ onClose }) => {
   return (
@@ -35,7 +34,7 @@ export const ProfilePopup = ({ onClose }) => {
                     <BarChart2 size={16} />
                     <span className="text-xs font-bold uppercase tracking-widest">Stats</span>
                 </div>
-                <span className="text-xs font-mono text-c-distinct">0.0k</span>
+                <span className="text-xs font-mono text-c-distinct">0.0h</span>
             </div>
         </div>
 

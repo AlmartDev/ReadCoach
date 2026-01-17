@@ -6,9 +6,11 @@ import { Header } from './components/Header';
 import { ReaderDisplay } from './components/ReaderDisplay';
 import { Settings as SettingsPopup } from './components/Settings'; 
 import { Footer } from './components/Footer';
-import { InputModal } from './components/InputModal'; 
-import { TextInputModal } from './components/TextInputModal'; 
-import { EasterEgg } from './components/EasterEgg';
+import { ModeCard } from './components/ModeCard';
+
+import { InputModal } from './modals/InputModal'; 
+import { TextInputModal } from './modals/TextInputModal'; 
+import { SecretModal } from './modals/SecretModal';
 
 import { ThemeProvider } from './contexts/ThemeContext';
 import { TEXT_LIBRARY } from './data/texts';
@@ -31,7 +33,7 @@ function AppContent() {
   const [isWpmModalOpen, setIsWpmModalOpen] = useState(false);
   const [isFontModalOpen, setIsFontModalOpen] = useState(false);
   const [isTextModalOpen, setIsTextModalOpen] = useState(false); 
-  const [isEasterEggOpen, setIsEasterEggOpen] = useState(false);
+  const [isSecretModalOpen, setIsSecretModalOpen] = useState(false);
 
   const isZenActive = isZenMode && isPlaying;
 
@@ -247,7 +249,7 @@ function AppContent() {
               setFontFamily={setFontFamily}
               onOpenCustomWpm={() => setIsWpmModalOpen(true)}
               onOpenCustomFont={() => setIsFontModalOpen(true)}
-              onOpenEasterEgg={() => setIsEasterEggOpen(true)}
+              onOpenSecretModal={() => setIsSecretModalOpen(true)}
             />
           </motion.div>
         )}
@@ -272,9 +274,9 @@ function AppContent() {
         onSubmit={handleCustomFontSubmit} 
       />
       
-      <EasterEgg 
-        isOpen={isEasterEggOpen} 
-        onClose={() => setIsEasterEggOpen(false)} 
+      <SecretModal 
+        isOpen={isSecretModalOpen} 
+        onClose={() => setIsSecretModalOpen(false)} 
       />
 
       <AnimatePresence>
@@ -300,59 +302,5 @@ function AppContent() {
     </div>
   );
 }
-
-const ModeCard = ({ layoutId, title, subtext, description, onClick, variant }) => {
-  const isSolid = variant === "solid";
-  
-  return (
-    <motion.div 
-      layoutId={layoutId}
-      onClick={onClick}
-      whileHover="hover"
-      initial="initial"
-      className={`relative w-full h-full flex flex-col cursor-pointer transition-all duration-500 rounded-[3rem] p-12
-        ${isSolid 
-          ? 'bg-c-distinct text-white justify-end shadow-xl' 
-          : 'bg-transparent border-2 border-c-secondary text-c-light justify-start hover:bg-c-secondary/20'}`}
-    >
-      {isSolid ? (
-        <>
-          <div className="absolute top-12 left-12 w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center">
-            <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
-          </div>
-          <div className="z-10">
-            <motion.h3 
-              layoutId={layoutId === "shared-reader-frame" ? "shared-reader-text" : undefined}
-              className="text-9xl font-black tracking-tighter leading-none"
-            >
-              {title}
-            </motion.h3>
-            <p className="mt-4 text-xs font-black uppercase tracking-[0.4em] opacity-60">
-              {subtext}
-            </p>
-          </div>
-        </>
-      ) : (
-        <>
-          <div className="z-10">
-            <h3 className="text-6xl font-black tracking-tighter leading-none text-c-text-main">
-              {title}
-            </h3>
-            <div className="w-12 h-1 bg-c-distinct mt-6 mb-8 rounded-full" />
-            <p className="text-sm font-medium leading-relaxed opacity-40 max-w-[180px]">
-              {description}
-            </p>
-          </div>
-        </>
-      )}
-
-      <motion.div 
-        variants={{ hover: { opacity: 1 } }}
-        initial={{ opacity: 0 }}
-        className="absolute inset-0 bg-white/5 rounded-[3rem] pointer-events-none"
-      />
-    </motion.div>
-  );
-};
 
 export default function App() { return (<ThemeProvider><AppContent /></ThemeProvider>); }

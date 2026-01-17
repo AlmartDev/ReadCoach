@@ -1,4 +1,3 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import { X, Type, Zap, EyeOff, FocusIcon, Check, ScanEye } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
@@ -81,7 +80,7 @@ export const Settings = ({
           <section className="space-y-4">
              <div className="flex items-center gap-2 text-c-distinct">
               <Zap size={16} />
-              <h3 className="text-[10px] font-bold uppercase tracking-widest">Theme</h3>
+              <h3 className="text-[10px] font-bold uppercase tracking-widest">Themes</h3>
             </div>
             <div className="grid grid-cols-2 gap-3">
               {palettes.map(palette => (
@@ -144,8 +143,10 @@ export const Settings = ({
              )}
           </section>
         </div>
-
         <div className="pt-8">
+          <div className="text-c-primary/60 mb-[4px] text-[10px] tracking-[2px] pointer-events-none">
+            ReadCoach - v0.9.0 - PRE-RELEASE
+          </div>
           <button 
             onClick={onClose}
             className="w-full py-4 bg-c-distinct text-white font-black rounded-2xl hover:brightness-110 active:scale-[0.98] transition-all text-xs tracking-widest"

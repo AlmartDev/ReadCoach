@@ -95,10 +95,6 @@ export const GuideView = ({ onBack, onStart }) => {  const containerVariants = {
           </button>
         </motion.div>
       </div>
-
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 opacity-[0.02] pointer-events-none">
-        <h1 className="text-[30rem] font-black tracking-tighter">RSVP</h1>
-      </div>
     </motion.div>
   );
 };

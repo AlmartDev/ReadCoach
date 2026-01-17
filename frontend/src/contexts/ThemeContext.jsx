@@ -1,4 +1,3 @@
-// frontend/src/contexts/ThemeContext.jsx
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
 const ThemeContext = createContext();
@@ -14,6 +13,8 @@ export const PALETTES = [
   { id: 'rose', name: 'Rose Gold', colors: { primary: '#4c0519', secondary: '#881337', light: '#fecdd3', distinct: '#fb7185', text: '#FFFFFF' } },
   { id: 'sun', name: 'Sunlight', colors: { primary: '#d9a90b', secondary: '#d9a90b', light: '#131313', distinct: '#FF9B00', text: '#000000'} },
   { id: 'smooth', name: 'Smooth', colors: { primary: '#7C444F', secondary: '#9F5255', light: '#F39E60', distinct: '#E16A54', text: '#FFFFFF'} }, // https://colorhunt.co/palette/7c444f9f5255e16a54f39e60
+  { id: 'ambient', name: 'Ambient', colors: { primary: '#8A244B', secondary: '#D02752', light: '#cfc2c2', distinct: '#F63049', text: '#FFFFFF'} }, // https://colorhunt.co/palette/f63049d027528a244b111f35
+  { id: 'lighscale', name: 'Light Scale', colors: { primary: '#D9CFC7', secondary: '#EFE9E3', light: '#262626', distinct: '#C9B59C', text: '#000000'} }, // https://colorhunt.co/palette/f9f8f6efe9e3d9cfc7c9b59c
 ];
 
 const hexToRgb = (hex) => {
