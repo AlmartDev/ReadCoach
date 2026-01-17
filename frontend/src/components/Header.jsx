@@ -92,7 +92,7 @@ export const Header = ({
           animate={isZenMode ? "hidden" : "visible"}
           className="flex justify-end items-center gap-3"
         >
-          <button className="p-2 text-c-light hover:text-c-text-main">EN</button>
+          <button className="p-2 text-c-light hover:text-c-text-main cursor-not-allowed">EN</button>
           <button 
             onClick={toggleFullscreen}
             className="p-2 text-c-light hover:text-c-text-main transition-colors"

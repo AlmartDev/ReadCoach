@@ -145,7 +145,7 @@ export const Settings = ({
         </div>
         <div className="pt-8">
           <div className="text-c-primary/60 mb-[4px] text-[10px] tracking-[2px] pointer-events-none">
-            ReadCoach - v0.9.0 - PRE-RELEASE
+            ReadCoach - v1.0.0
           </div>
           <button 
             onClick={onClose}
